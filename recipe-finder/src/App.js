@@ -25,13 +25,13 @@ class App extends Component {
   }
 
   // REMOVE AFTER TESTING
-  componentDidMount = async () => {
-    // console.log(ingredients)
-    const res = await axios.post('https://cors-anywhere.herokuapp.com/http://www.recipepuppy.com/api/?q=tomatoes')
-    console.log(res.data.results)
-    this.setState({ recipes: res.data.results })
-    // this.toggleLoading()
-  }
+  // componentDidMount = async () => {
+  //   // console.log(ingredients)
+  //   const res = await axios.post('https://cors-anywhere.herokuapp.com/http://www.recipepuppy.com/api/?q=tomatoes')
+  //   console.log(res.data.results)
+  //   this.setState({ recipes: res.data.results })
+  //   // this.toggleLoading()
+  // }
 
   toggleListen = async () => {
     await this.setState({ listening: !this.state.listening })
@@ -137,7 +137,7 @@ class App extends Component {
     //         console.error(e)
     //       }
     // }
-    else if (!this.state.recipes || this.state.recipes.length === 0) {
+    if (!this.state.recipes || this.state.recipes.length === 0) {
       await this.setState({requestError: true})
       this.setState({recipes: null})
       }
