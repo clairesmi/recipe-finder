@@ -1,3 +1,26 @@
+html {
+  /* background-color: #EBE5E4; */
+  background-image: url(https://www.foodiesfeed.com/wp-content/uploads/2019/05/red-fruit-and-vegetables-on-a-white-background-4.jpg);
+  background-size: cover;
+}
+
+p {
+  color: #120002;
+}
+
+a {
+  color: #120002;
+}
+
+a:hover {
+  transform: scale(0.975);
+}
+
+button:hover {
+transform: scale(0.95);
+cursor: pointer;
+}
+
 .header {
   animation: header 4s;
 }
@@ -5,11 +28,26 @@
 
 .underline {
   animation: header 4s;
-  background-size: ;
+}
+
+.recipes {
+  animation: recipes 2s;
 }
 
 @keyframes header {
   100% { opacity: 1;}
   0% { opacity: 0 }
+}
+
+@keyframes recipes {
+  from {
+    margin-top: 100%;
+    height: 300%; 
+  }
+
+  to {
+    margin-top: 0%;
+    height: 100%;
+  }
 }
 
