@@ -4,6 +4,8 @@ import React, { Component} from 'react';
 import axios from 'axios'
 import SpeechRecognition from 'react-speech-recognition'
 
+import './App.css'
+
 const SpeechRec =  window.webkitSpeechRecognition
 const recognition = new SpeechRec()
 // console.log(new SpeechRec())
@@ -20,17 +22,16 @@ class App extends Component {
     listening: false,
     requestError: false,
     toggleRecipeDisplay: false,
-    loading: false
   }
 
   // REMOVE AFTER TESTING
-  componentDidMount = async () => {
-    // console.log(ingredients)
-    const res = await axios.post('https://cors-anywhere.herokuapp.com/http://www.recipepuppy.com/api/?q=tomatoes')
-    console.log(res.data.results)
-    this.setState({ recipes: res.data.results })
-    this.toggleLoading()
-  }
+  // componentDidMount = async () => {
+  //   // console.log(ingredients)
+  //   const res = await axios.post('https://cors-anywhere.herokuapp.com/http://www.recipepuppy.com/api/?q=tomatoes')
+  //   console.log(res.data.results)
+  //   this.setState({ recipes: res.data.results })
+  //   this.toggleLoading()
+  // }
 
   toggleListen = async () => {
     await this.setState({ listening: !this.state.listening })
@@ -87,7 +88,7 @@ class App extends Component {
   stopListening = (e) => {
         recognition.stop()
         recognition.onend = () => {
-          console.log('i have stopped listening')
+          console.log('not listening')
       } 
       recognition.onerror = event => {
         console.log("Error occurred in recognition: " + event.error)
@@ -139,19 +140,19 @@ class App extends Component {
       console.log(this.state.requestError) // use this state to put an error message up for the user (alert)
       console.log(this.state.recipes)
       }
-      this.toggleLoading()
   }
 
-  toggleLoading = () => {
-    this.setState({loading: !this.state.loading})
-    console.log(this.state.loading)
-    setTimeout(() => {this.setState({loading: !this.state.loading})}, 7000)
-  }
+  // toggleLoading = () => {
+  //   this.setState({loading: !this.state.loading})
+  //   console.log(this.state.loading)
+  //   setTimeout(() => {this.setState({loading: !this.state.loading})}, 7000)
+  // }
 
   resetTranscript = () => {
     this.setState({recipes: null})
     this.setState({finalTranscript: ''})
-    this.toggleLoading()
+    this.setState({requestError: false})
+    // this.toggleLoading()
   }
 
   toggleRecipeDisplay = () => {
@@ -159,35 +160,41 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.loading) 
-    const { finalTranscript, recipes, toggleRecipeDisplay, toggleLoading} = this.state
+    console.log(!this.state.requestError) 
+    const { finalTranscript, recipes, toggleRecipeDisplay, requestError} = this.state
     const firstFiveRecipes = recipes ? recipes.slice(0, 5) : null
-    return (
-      <div style={pageWrapper}>
-        <div style={header}>
-        <h1>Talk Foodie to Me</h1>
-      </div>
+    return ( 
+      <div className='main-wrapper' style={main}>
+        <div style={!requestError ? pageWrapper: outerModal}>
+          <div className='header' style={header}>
+            <h1 style={headerText}>Talk Foodie to Me</h1>
+          </div>
+              <div className='underline' style={underLine}></div>
       <div style={pageWelcome}>
-      Hello! Welcome to Talk Foodie to Me. To use the site, click on START TALKING, say ONE or TWO ingredients, then when you're finished
-      click on FIND RECIPES!
+        <p>
+      Hey! Welcome to Talk Foodie to Me. To use the site: <br/>
+      1. Click on SAY INGREDIENTS, <br/>
+      2. Say ONE or TWO ingredients<br/>
+      3. Click on FIND RECIPES and scroll down to view your recipes!
+        </p>
       </div>
       <div style={pageContent}>
         <div className="speech-rec" style={inner_elements}>
       {/* <span>{this.transcript}</span> */}
-        <button id='microphone-btn' style={button} onClick={this.toggleListen}>START TALKING</button>
-        <button id='microphone-btn' style={button} onClick={this.stopToggleListen}>FIND RECIPES</button>
-        <button onClick={this.resetTranscript} style={button}>START AGAIN</button>
+        <button id='microphone-btn' style={buttonOne} onClick={this.toggleListen}>SAY INGREDIENTS</button>
+        <button id='microphone-btn' style={buttonTwo} onClick={this.stopToggleListen}>FIND RECIPES</button>
+        <button onClick={this.resetTranscript} style={buttonThree}>START AGAIN</button>
         {/* <div id='interim' style={interim}>{interimTranscript} </div> */}
         </div>
+        <div style={transcriptLabel}>You asked for recipes for:</div>
         <div id='final' style={final}>{finalTranscript}</div>
         
       </div>
-      {!toggleLoading &&
       <>
       <div style={recipeShow}>
-        Recipes
       {recipes &&
       <div className="five-recipes">
+      Recipes
       {firstFiveRecipes.map((recipe, i) => (
         <>
               <label key={i}>
@@ -198,9 +205,9 @@ class App extends Component {
               </label> 
             </>
             ))}
+            {!toggleRecipeDisplay && <button onClick={this.toggleRecipeDisplay}>Show me more</button>}
             </div>
             }
-            {!toggleRecipeDisplay && <button onClick={this.toggleRecipeDisplay}>Show me more</button>}
 
             {recipes && toggleRecipeDisplay &&
             <div className="ten-recipes">
@@ -217,15 +224,15 @@ class App extends Component {
             <button onClick={this.toggleRecipeDisplay}>Show less</button>
             </div>
             }
+           
       </div>
-      </>
-  }
-  {toggleLoading && 
-   <div className="loading-screen" style={loading}>
-        LOADING SCREEN
+      </>  
       </div>
-  }
-      </div>
+        {requestError &&
+          <div style={innerModal}>Oops, something went wrong!
+          <button onClick={this.resetTranscript}>Try Again</button>
+          </div>}
+    </div>
     )
   }
 }
@@ -233,42 +240,86 @@ class App extends Component {
 export default App
 
 const styles = {
+  main: {
+    // height: '120vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flexStart',
+    alignItems: 'center',
+    color: '#EBE5E4'
+  },
   pageWrapper: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    height: '100vh',
-    margin: '0px'
+    justifyContent: 'center',
+    paddingTop: '15px'
   },
   header: {
-    border: 'solid black 1px',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'Carrois Gothic SC, sans-serif',
+    fontSize: '50px',
+    fontWeight: 'light',
+    color: '#FF5001'
+  },
+  headerText: {
+    margin: '10px'
+  },
+  underLine: {
+    border: 'solid grey 1px',
+    width: '80vw'
   },
   pageWelcome: {
-    border: 'solid black 1px',
-    width: '50vw'
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: '20px',
+    width: '75vw',
+    fontFamily: 'Oswald, sans-serif',
+    fontSize: '25px',
+    color: '#120002'
   },
   pageContent: {
     display: 'flex',
     flexDirection: 'column',
-    border: 'solid black 1px',
-    height: '50vh',
     justifyContent: 'center',
     alignItems: 'center'
   },
-  button: {
-    width: '100px',
-    height: '100px',
-    background: 'lightblue',
+  buttonOne: {
+    width: '120px',
+    height: '120px',
+    background: '#F8F272',
+    border: 'grey',
     borderRadius: '50%',
-    margin: '10px'
+    margin: '20px',
+    // fontSize: '12px',
+    fontWeight: 'bold',
+    boxShadow: '0px 0px 15px 0px'
   },
-  interim: {
-    color: 'gray',
-    border: '#ccc 1px solid',
-    padding: '1em',
-    margin: '1em',
-    width: '300px'
+  buttonTwo: {
+    width: '120px',
+    height: '120px',
+    background: '#94FBAB',
+    borderRadius: '50%',
+    margin: '20px',
+    // fontSize: '13px',
+    fontWeight: 'bold',
+    boxShadow: '0px 0px 15px 0px'
+  },
+  buttonThree: {
+    width: '120px',
+    height: '120px',
+    background: '#F4989C',
+    borderRadius: '50%',
+    margin: '20px',
+    // fontSize: '13px',
+    fontWeight: 'bold',
+    boxShadow: '0px 0px 15px 0px'
+  },
+  transcriptLabel: {
+    color: '#120002',
+    fontFamily: 'Oswald, sans-serif',
+    fontSize: '25px',
+    marginTop: '10px',
   },
   final: {
     color: 'black',
@@ -278,11 +329,29 @@ const styles = {
     width: '50vw'
   },
   recipeShow: {
-    border: 'solid black 2px',
     width: '75vw'
   },
-  loading: {
-    background: 'yellow'
-  }
+  outerModal: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    margin: '0px',
+    opacity: '0.5'
+  },
+  innerModal: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignSelf: 'center',
+    height: '70vh',
+    width: '70vw',
+    backgroundColor: 'green',
+    opacity: '1.0',
+    border: 'solid grey 1px',
+    zIndex: '5',
+    position: 'absolute',
+    marginTop: '60px',
+    boxShadow: '0px 2px 10px 0px' 
+  },
 }
-const {pageWrapper, header, pageWelcome, pageContent, recipeShow, inner_elements, button, final, loading} = styles 
+const {main, pageWrapper, header, headerText, underLine, pageWelcome, pageContent, recipeShow, 
+  inner_elements, buttonOne, buttonTwo, buttonThree, transcriptLabel, final, outerModal, innerModal} = styles
