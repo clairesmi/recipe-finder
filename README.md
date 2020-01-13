@@ -19,11 +19,11 @@ Use the clone button to download the source code. Enter the following commands i
 
 <!— To install all the packages listed in the package.json: —> $ yarn 
 
-<!— Run the app on localhost:4000 : —> $ yarn start 
+<!— Run the app on localhost:3000 : —> $ yarn start 
 
 <!— Check the console for any issues and if there are check the package.json for any dependancies missing —>
 
-<!- Navigate to http://localhost:4000/>
+<!- Navigate to http://localhost:3000/>
 
 ## Technologies Used:
 JavaScript
