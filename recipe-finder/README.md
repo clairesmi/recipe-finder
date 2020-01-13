@@ -78,7 +78,7 @@ I also considered the fact that the user may press 'Find More Recipes' before pr
 
 ## Reflection and Future Improvements
 
-I used Insomnia to test the API, and implemented a componentDisMount for testing so that I could test the recipe page without having to test the speech component every time the page rendered. 
+I used Insomnia to test the API, and implemented a componentDidMount for testing so that I could test the recipe page without having to test the speech component every time the page rendered. 
 
 However my next step is to learn how to use Jest for testing with React so that I can test this project and then in future I will have the tools to implement TDD in my work for more robust and better functioning end products.
  
