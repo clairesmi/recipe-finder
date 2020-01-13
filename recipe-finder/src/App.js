@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
 import axios from 'axios'
-import SpeechRecognition from 'react-speech-recognition'
 
 import './App.css'
 
@@ -98,29 +97,29 @@ class App extends Component {
     console.log(this.state.finalTranscript)
     // if (this.state.finalTranscript) {
       let ingredients = this.state.finalTranscript.split(' ')
-      console.log(ingredients)
+      console.log(ingredients.length)
       
       if (ingredients.length === 2) {
         try {
-          console.log(ingredients)
+          // console.log(ingredients)
           const res = await axios.post(`https://cors-anywhere.herokuapp.com/http://www.recipepuppy.com/api/?q=${ingredients}`)
           this.setState({ recipes: res.data.results })
           // console.log(res.data.results)
           }
 
-          catch (e) {
-            (console.error())
+          catch (err) {
+            console.log(err)
           }
       }
       if (ingredients.length === 3) {
         ingredients = this.state.finalTranscript.split(' ')
-        console.log(ingredients)
+        // console.log(ingredients)
           try {
             const res = await axios.post(`https://cors-anywhere.herokuapp.com/http://www.recipepuppy.com/api/?i=${ingredients[0]}&q=${ingredients[1]}`)
             this.setState({ recipes: res.data.results })
           }
-          catch (e) {
-            console.error(e)
+          catch (err) {
+            console.log(err)
           }
     }
     
@@ -135,13 +134,17 @@ class App extends Component {
     //         console.error(e)
     //       }
     // }
-    if (!this.state.recipes || this.state.recipes.length === 0) {
+    if (!this.state.recipes || this.state.recipes.length === 0 || ingredients.length === 1) {
       this.setState({requestError: true, recipes: null})
       }
   }
 
   resetTranscript = () => {
-    this.setState({recipes: null, finalTranscript: '', requestError: false, toggleRecipeDisplay: false})
+    this.setState({listening: false}, () => {
+      this.stopListening()
+      this.setState({recipes: null, finalTranscript: '', requestError: false, toggleRecipeDisplay: false})
+      // console.log(this.state.listening)
+    })
   }
 
   toggleRecipeDisplay = () => {
