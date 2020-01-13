@@ -169,7 +169,7 @@ class App extends Component {
       Hey! Welcome to Talk Foodie to Me. To use the site: <br/>
       1. Click on SAY INGREDIENTS, <br/>
       2. Say ONE or TWO ingredients<br/>
-      3. Click on FIND RECIPES and scroll down to view your recipes!
+      3. Click on FIND RECIPES and your recipes will appear!
         </p>
       </div>
       <div style={pageContent}>
