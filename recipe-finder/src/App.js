@@ -1,5 +1,3 @@
-// Set up filter function 
-// use handle stop listening to run a function to do api call 
 import React, { Component} from 'react';
 import axios from 'axios'
 import SpeechRecognition from 'react-speech-recognition'
@@ -30,25 +28,25 @@ class App extends Component {
   //   const res = await axios.post('https://cors-anywhere.herokuapp.com/http://www.recipepuppy.com/api/?q=tomatoes')
   //   console.log(res.data.results)
   //   this.setState({ recipes: res.data.results })
-  //   // this.toggleLoading()
   // }
 
-  toggleListen = async () => {
-    await this.setState({ listening: !this.state.listening })
-    console.log(this.state.listening)
-    this.handleListen()
+  toggleListen = () => {
+    this.setState({ listening: !this.state.listening }, () => {
+      this.handleListen()
+      // console.log(this.state.listening)
+    })
   }
 
-  stopToggleListen = async (e) => {
+  stopToggleListen = (e) => {
     e.preventDefault()
-    this.stopListening()
-    await this.setState({ listening: !this.state.listening })
-    this.stopListening()
-    // this.searchRecipes()
+    this.setState({ listening: !this.state.listening }, () => {
+      this.stopListening()
+      // console.log(this.state.listening)
+    })
   }
 
   handleListen = async (e) => {
-    console.log('also listening')
+    console.log('now listening')
     if (this.state.listening === true) {
       recognition.start()
       recognition.onend = () => recognition.start()
@@ -138,23 +136,12 @@ class App extends Component {
     //       }
     // }
     if (!this.state.recipes || this.state.recipes.length === 0) {
-      await this.setState({requestError: true})
-      this.setState({recipes: null})
+      this.setState({requestError: true, recipes: null})
       }
   }
 
-  // toggleLoading = () => {
-  //   this.setState({loading: !this.state.loading})
-  //   console.log(this.state.loading)
-  //   setTimeout(() => {this.setState({loading: !this.state.loading})}, 7000)
-  // }
-
   resetTranscript = () => {
-    this.setState({recipes: null})
-    this.setState({finalTranscript: ''})
-    this.setState({requestError: false})
-    this.setState({toggleRecipeDisplay: false})
-    // this.toggleLoading()
+    this.setState({recipes: null, finalTranscript: '', requestError: false, toggleRecipeDisplay: false})
   }
 
   toggleRecipeDisplay = () => {
