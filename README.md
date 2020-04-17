@@ -1,7 +1,7 @@
 ![CS Icon](/src/assets/favicon.ico) 
 # Talk Foodie To Me
 
-This is a web app project that I set myself with the aim of having a first go at using JavaScript’s Web Speech API and using the alternative class component syntax in React (without constructor and manual binding). I also wanted to try working with styled components in React.
+This is a web app project that I set myself with the aim of having a first go at using JavaScript’s Web Speech API and using the newer class component syntax in React (without constructor and manual binding). I also wanted to try working with styled components in React.
 
 The web app enables the user to verbally request recipes based on one or two specified ingredients.
 
